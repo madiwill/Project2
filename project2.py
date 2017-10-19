@@ -14,6 +14,10 @@ import unittest
 import requests
 import re
 from bs4 import BeautifulSoup
+import urllib.request, urllib.parse, urllib.error
+import ssl
+from urllib.request import urlopen
+
 
 
 ## Part 1 -- Define your find_urls function here.
@@ -27,22 +31,10 @@ from bs4 import BeautifulSoup
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
 def find_urls(s):
-    # print (re.search("(https:\/\/|http:\/\/)\S+\.\S{2,}", s))
     lst = []
     for match in re.findall("((https:\/\/|http:\/\/)\S+\.\S{2,})", s):
         lst.append(match[0])
     return (lst)
-
-
-
-    # url_string = [""]
-    # urls = ['http://', 'https://']
-    # for url in urls:
-    #     if url in url_string:
-    #         print(url_string)
-    # pass
-    #Your code here
-
 
 
 ## PART 2  - Define a function grab_headlines.
@@ -52,9 +44,9 @@ def find_urls(s):
 
 def grab_headlines():
     lst = []
-    filename = ("opinion.html")
-    x = open(filename, 'r')
-    soup = BeautifulSoup(x.read(), "html.parser")
+    url = "https://www.michigandaily.com/section/opinion"
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, "html.parser")
     for headline in (soup.find("div", class_="view-most-read").find_all("a")):
          lst.append((headline.text))
     return (lst)
